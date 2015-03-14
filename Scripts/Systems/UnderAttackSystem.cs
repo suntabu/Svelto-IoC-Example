@@ -29,7 +29,7 @@ public class UnderAttackSystem: ITickable, IMonsterCounter
     /// public methods
     /// </summary>
 
-    public void AddFreeWeapon(WeaponPresenter weapon)
+    public void AddWeapon(WeaponPresenter weapon)
     {
         _freeWeapons.Add(weapon);
     }
@@ -72,14 +72,13 @@ public class UnderAttackSystem: ITickable, IMonsterCounter
         _monstersDic.Remove(monster.target);
     }
 
-    void TargetOutOfRange(WeaponPresenter weapon, bool targetIsDead)
+    void TargetOutOfRange(WeaponPresenter weapon)
     {
         weapon.OnTargetNotFound -= TargetOutOfRange;
 
-        if (targetIsDead == false)
-            _monstersDic[weapon.target].StopBeingHit();
+        _monstersDic[weapon.target].StopBeingHit();
 
-        AddFreeWeapon(weapon);
+        AddWeapon(weapon);
     }
 
     List<WeaponPresenter>       _freeWeapons; 

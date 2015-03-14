@@ -10,21 +10,20 @@ public class WeaponView : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-        _tweenparms = new TweenParms()
+        _tweener = HOTween.To(this.transform, 4, new TweenParms()
            .Prop("rotation", new Vector3(0, 180, 0))
            .Ease(EaseType.EaseInOutQuad)
-           .Loops(-1, LoopType.Yoyo);
-
-        _tweener = HOTween.To(this.transform, 4, _tweenparms);
-
-        _tweener.Play();
+           .Loops(-1, LoopType.Yoyo)
+         );
+		
+		PlayIdle();
 
         weapon.SetView(this);
 	}
 
 	public void PlayIdle()
 	{
-        _tweener.Play();
+		_tweener.Play();
 	}
 	
 	void Update()
@@ -40,5 +39,4 @@ public class WeaponView : MonoBehaviour
 	WeaponState 		_currentViewState;
 	Tweener				_tweener;
     GameObject          _lockedTarget;
-    TweenParms          _tweenparms;
 }

@@ -15,7 +15,7 @@ public class WeaponPresenter : IInitialize
     [Inject] public UnderAttackSystem weaponSystem { private get; set; }
 	// Use this for initialization
 
-    public event System.Action<WeaponPresenter, bool> OnTargetNotFound;
+    public event System.Action<WeaponPresenter> OnTargetNotFound;
 
     public Transform target { get { return _lockedTarget; } }
 
@@ -24,20 +24,18 @@ public class WeaponPresenter : IInitialize
         _lockedTarget = null;
         _currentViewState = WeaponState.idle;
 
-        weaponSystem.AddFreeWeapon(this);
+        weaponSystem.AddWeapon(this);
     }
 
 	public void Update()
 	{
         if (_currentViewState == WeaponState.fire)
         {
-            bool targetIsDead = _lockedTarget == null;
-
-            if (targetIsDead || TargetIsInRange(_lockedTarget) == false)
+            if (_lockedTarget == null || TargetIsInRange(_lockedTarget) == false)
             {
                 Idle();
 
-                OnTargetNotFound(this, targetIsDead);
+                OnTargetNotFound(this);
 
                 _lockedTarget = null;
 

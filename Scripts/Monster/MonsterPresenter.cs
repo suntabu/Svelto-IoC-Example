@@ -35,12 +35,12 @@ public class MonsterPresenter
 
     public void StartBeingHit()
     {
-        _hitEnergy += DAMAGE;
+        _hitEnergy += 0.1f;
     }
 
     public void StopBeingHit()
     {
-        _hitEnergy -= DAMAGE;
+        _hitEnergy -= 0.1f;
     }
 
     public void Update(float deltaTime)
@@ -60,8 +60,6 @@ public class MonsterPresenter
 
         _view.Killed();
     }
-
-    const float DAMAGE = 0.25f;
 
     float           _energy = 1.0f;
     float           _hitEnergy = 0.0f;
