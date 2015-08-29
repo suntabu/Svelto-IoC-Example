@@ -26,7 +26,7 @@ public class Main:ICompositionRoot
         
         //interface is bound to a specific instance
         container.Bind<IGameObjectFactory>().AsSingle(new GameObjectFactory(container));
-        //interface is bound to a specific implementation, the same instance will be used once created
+        //interfaces are bound to specific implementations, the same instance will be used once created
         container.Bind<IMonsterCounter>().AsSingle<MonsterCountHolder>();
         container.Bind<IMonsterCountHolder>().AsSingle<MonsterCountHolder>();
         //once the dependency is requested, a new instance will be created

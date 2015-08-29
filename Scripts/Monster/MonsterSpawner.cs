@@ -27,7 +27,8 @@ public class MonsterSpawner:ITickable, IInitialize
 		{
             if (monsterCounter.monsterCount < 5)
             {
-                GameObject monster = gameObjectFactory.Build(CreateMonster());
+                //the Monster dependencies will be injected by the container inside the factory
+                GameObject monster = gameObjectFactory.Build(Monster()); 
 
                 monster.transform.parent = _monstersRoot.transform;
             }
@@ -36,7 +37,7 @@ public class MonsterSpawner:ITickable, IInitialize
 		}
 	}
 
-    GameObject CreateMonster()
+    GameObject Monster()
     {
         return _originalGO;
     }
