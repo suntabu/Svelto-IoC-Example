@@ -25,7 +25,8 @@ public class Main:ICompositionRoot
         container = new Container();
         
         container.Bind<IGameObjectFactory>().AsSingle(new GameObjectFactory(container));
-        container.Bind<IMonsterCounter>().AsSingle<UnderAttackSystem>();
+        container.Bind<IMonsterCounter>().AsSingle<MonsterCountHolder>();
+        container.Bind<IMonsterCountHolder>().AsSingle<MonsterCountHolder>();
 
         container.Bind<WeaponPresenter>().ToFactory(new MultiProvider<WeaponPresenter>());
         container.Bind<MonsterPresenter>().ToFactory(new MultiProvider<MonsterPresenter>());

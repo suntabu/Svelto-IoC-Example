@@ -1,22 +1,22 @@
-using System;
-using Svelto.IoC;
 using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
 using Svelto.Ticker;
+using Svelto.IoC;
 
-public class UnderAttackSystem: ITickable, IMonsterCounter
+public class UnderAttackSystem: ITickable, IInitialize
 {
+    [Inject] public IMonsterCountHolder     monsterCounter      { set; private get; }
+
     public UnderAttackSystem()
 	{
         _freeWeapons = new List<WeaponPresenter>();
-        _monsters = new HashSet<MonsterPresenter>();
         _monstersDic = new Dictionary<Transform, MonsterPresenter>();
 	}
 
-    //IMonsterCounter Interface
-
-    public int monsterCount { get { return _monsters.Count; } }
+    public void OnDependenciesInjected()
+	{
+        DesignByContract.Check.Require(monsterCounter != null);
+	}
 
     //ITickable Interface
 
@@ -36,16 +36,19 @@ public class UnderAttackSystem: ITickable, IMonsterCounter
 
     public void AddMonster(MonsterPresenter monster)
     {
-        _monsters.Add(monster);
         _monstersDic[monster.target] = monster;
+
+        monsterCounter.AddMonster();
 
         monster.OnKilled += OnMonsterKilled;
     }
 
     void CheckTargets()
     {
-        foreach (MonsterPresenter currentMonster in _monsters)
+        for (var monsterEnumerator = _monstersDic.Values.GetEnumerator(); monsterEnumerator.MoveNext();)
         {
+            var currentMonster = monsterEnumerator.Current;       
+    
             for (int i = 0; i < _freeWeapons.Count; i++)
             {
                 WeaponPresenter currentWeapon = _freeWeapons[i];
@@ -68,7 +71,8 @@ public class UnderAttackSystem: ITickable, IMonsterCounter
     {
         monster.OnKilled -= OnMonsterKilled;
 
-        _monsters.Remove(monster);
+        monsterCounter.RemoveMonster();
+
         _monstersDic.Remove(monster.target);
     }
 
@@ -82,8 +86,6 @@ public class UnderAttackSystem: ITickable, IMonsterCounter
         AddFreeWeapon(weapon);
     }
 
-    List<WeaponPresenter>       _freeWeapons; 
-    HashSet<MonsterPresenter>   _monsters;
-
-    Dictionary<Transform, MonsterPresenter> _monstersDic;
+    List<WeaponPresenter>                       _freeWeapons; 
+     Dictionary<Transform, MonsterPresenter>    _monstersDic;
 }
