@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class MonsterView: MonoBehaviour
 {
-    [Inject] public MonsterPresenter monster { set; private get; }
+    [Inject] public MonsterPresenter    monster { set; private get; }
+    [Inject] public MonsterPathFollower pathFollower { set; private get; }
 
 	void Start()
 	{
@@ -11,7 +12,7 @@ public class MonsterView: MonoBehaviour
 
         monster.SetView(this);
 
-        GetComponent<MonsterPathFollower>().SetMonster(monster);
+        pathFollower.Start(transform);
 	}
 	
 	void Update()

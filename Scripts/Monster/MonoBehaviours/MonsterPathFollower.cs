@@ -3,32 +3,33 @@ using UnityEngine;
 using Holoville.HOTween;
 using Svelto.IoC;
 
-public class MonsterPathFollower:MonoBehaviour
+public class MonsterPathFollower
 {
 	[Inject] public PathController		pathController 			{ set; private get; }
 	
-	void Start()
+	public void Start(Transform transform)
 	{
-		transform.position = pathController.CheckPoint(currentCheckPoint);
+        _transform = transform;
+		_transform.position = pathController.CheckPoint(_currentCheckPoint);
 		
 		MoveNext();
 	}
 	
 	void MoveNext()
 	{
-		if (pathController.IsEndReached(currentCheckPoint) == false)
+		if (pathController.IsEndReached(_currentCheckPoint) == false)
 		{
-			TweenParms paramaters = new TweenParms().Prop("position", pathController.CheckPoint(currentCheckPoint + 1)).Ease(EaseType.Linear).OnComplete(MoveNext);
+            TweenParms paramaters = new TweenParms().Prop("position", pathController.CheckPoint(_currentCheckPoint + 1)).Ease(EaseType.Linear).OnComplete(MoveNext);
 			
-			Tweener tweener = HOTween.To(this.transform, 2, paramaters);
+			Tweener tweener = HOTween.To(_transform, 2, paramaters);
 			
 			tweener.Play();
 			
-			currentCheckPoint++;
+			_currentCheckPoint++;
 		}
 		else
 		{
-            _monster.CommitSuicide();
+            _monster.CommitSuicide(); //in a real project I would have used a command, not directly the presenter
 		}
 	}
 
@@ -37,7 +38,8 @@ public class MonsterPathFollower:MonoBehaviour
         _monster = monster;
     }
 	
-	int currentCheckPoint = 0;
+	int              _currentCheckPoint = 0;
     MonsterPresenter _monster;
+    Transform        _transform;
 }
 
