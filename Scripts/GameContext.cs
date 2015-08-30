@@ -40,9 +40,7 @@ public class Main:ICompositionRoot
     
     void StartGame()
     {
-        //tickEngine could be added in the container as well
-        //if needed to other classes!
-        UnityTicker tickEngine = new UnityTicker(); 
+        UnityTicker tickEngine = new UnityTicker(); //note this object can be safely garbage collected
         
         tickEngine.Add(container.Inject(new MonsterSpawner()));
         tickEngine.Add(container.Build<UnderAttackSystem>());

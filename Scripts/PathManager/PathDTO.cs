@@ -1,8 +1,7 @@
-using System;
 using UnityEngine;
 using Svelto.IoC;
 
-public class PathModel:MonoBehaviour
+public class PathDTO:MonoBehaviour
 {
 	[Inject] public PathController pathController { private get; set; }
 	
@@ -10,7 +9,7 @@ public class PathModel:MonoBehaviour
 	
 	void Start()
 	{
-		pathController.pathDTO = this.placeHolders;
+		pathController.pathData = this.placeHolders;
 		
 		GameObject.Destroy(this);
 	}
