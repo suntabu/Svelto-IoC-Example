@@ -11,6 +11,7 @@ enum MonsterState
 public class MonsterPresenter
 {
     [Inject] public UnderAttackSystem attackSystem { set; private get; }
+    [Inject] public MonsterPathFollower pathFollower { set; private get; }
 
     public event System.Action<MonsterPresenter> OnKilled;
 
@@ -18,17 +19,24 @@ public class MonsterPresenter
     public float energy { get { return _energy; } }
 
     public MonsterPresenter()
-	{
-	}
+	{}
+
+    internal void CleanUP()
+    {
+        pathFollower.CleanUP();
+    }
 
     public void SetView(MonsterView view)
     {
         _view = view;
 
+        pathFollower.Start(view.transform);
+        pathFollower.OnPathEnded += CommitSuicide;
+
         attackSystem.AddMonster(this);
     }
 
-    public void CommitSuicide()
+    void CommitSuicide()
 	{
         Killed();
 	}
@@ -55,6 +63,8 @@ public class MonsterPresenter
 
     void Killed()
     {
+        CleanUP();
+
         if (OnKilled != null)
             OnKilled(this);
 

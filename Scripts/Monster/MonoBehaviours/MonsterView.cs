@@ -4,15 +4,12 @@ using UnityEngine;
 public class MonsterView: MonoBehaviour
 {
     [Inject] public MonsterPresenter    monster      { set; private get; }
-    [Inject] public MonsterPathFollower pathFollower { set; private get; }
-
+    
 	void Start()
 	{
         DesignByContract.Check.Require(monster != null);
 
         monster.SetView(this);
-
-        pathFollower.Start(transform);
 	}
 	
 	void Update()

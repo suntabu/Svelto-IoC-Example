@@ -1,8 +1,6 @@
 using UnityEngine;
-using System.Collections;
 using Holoville.HOTween;
 using Svelto.IoC;
-using System.Collections.Generic;
 
 public class WeaponView : MonoBehaviour
 {

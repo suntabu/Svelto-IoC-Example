@@ -6,6 +6,8 @@ using Svelto.IoC;
 public class MonsterPathFollower
 {
 	[Inject] public PathController		pathController 			{ set; private get; }
+
+    public event System.Action OnPathEnded;
 	
 	public void Start(Transform transform)
 	{
@@ -21,25 +23,26 @@ public class MonsterPathFollower
 		{
             TweenParms paramaters = new TweenParms().Prop("position", pathController.CheckPoint(_currentCheckPoint + 1)).Ease(EaseType.Linear).OnComplete(MoveNext);
 			
-			Tweener tweener = HOTween.To(_transform, 2, paramaters);
+			_tweener = HOTween.To(_transform, 2, paramaters);
 			
-			tweener.Play();
+			_tweener.Play();
 			
 			_currentCheckPoint++;
 		}
 		else
 		{
-            _monster.CommitSuicide(); //in a real project I would have used a command, not directly the presenter
+            OnPathEnded();
 		}
 	}
 
-    public void SetMonster(MonsterPresenter monster)
+    internal void CleanUP()
     {
-        _monster = monster;
+        _tweener.Kill();
     }
+
 	
 	int              _currentCheckPoint = 0;
-    MonsterPresenter _monster;
     Transform        _transform;
+    Tweener         _tweener;
 }
 
