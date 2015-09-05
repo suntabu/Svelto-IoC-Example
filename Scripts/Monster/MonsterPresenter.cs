@@ -1,5 +1,4 @@
 using Svelto.IoC;
-using System;
 using UnityEngine;
 
 enum MonsterState
@@ -17,9 +16,6 @@ public class MonsterPresenter
 
     public Transform target { get { return _view.transform; } }
     public float energy { get { return _energy; } }
-
-    public MonsterPresenter()
-	{}
 
     internal void CleanUP()
     {
